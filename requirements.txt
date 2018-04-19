@@ -1,0 +1,5 @@
+certifi==2018.4.16
+future==0.16.0
+numpy==1.14.1
+python-telegram-bot==10.0.2
+requests==2.18.4
