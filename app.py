@@ -1,8 +1,8 @@
 from os import environ
-BOT_TOKEN = environ.get("MR_ROBOTO_TOKEN")
+botToken = environ.get("MR_ROBOTO_TOKEN")
 
 from telegram.ext import Updater
-updater = Updater(token=BOT_TOKEN)
+updater = Updater(token=botToken)
 
 dispatcher = updater.dispatcher;
 
@@ -12,7 +12,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="beep boop")
 
-from telegra.ext import CommandHandler
+from telegram.ext import CommandHandler
 start_handler = CommandHandler("start", start)
 dispatcher.add_handler(start_handler)
 
