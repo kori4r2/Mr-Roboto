@@ -1,5 +1,8 @@
 # Import bot token from environment variables
+import inspect
+import localDatabase as database
 from os import environ
+import botCommands as botCommands
 botToken = environ.get("MR_ROBOTO_TOKEN")
 
 # Create updater and save reference to dispatcher
@@ -11,25 +14,14 @@ dispatcher = updater.dispatcher;
 import logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-# Function to run with the start command
-def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="beep boop")
-
-# Function to run with the new command
-def new(bot, update):
-#    bot.send_message(chat_id=update.message.chat_id, text=("new sent by" + update.effective_user.to_json()))
-    userID = update.effective_user.id
-    member = update.effective_chat.get_member(user_id=userID)
-    bot.send_message(chat_id=update.message.chat_id, text="@"+member.user.username)
+# Get list of commands available from the module
+array = inspect.getmembers(botCommands, inspect.isfunction)
+commList = [item[0] for item in array]
 
 from telegram.ext import CommandHandler
-# Add command handler for start command
-start_handler = CommandHandler("start", start)
-dispatcher.add_handler(start_handler)
-
-# Add command handler for new command
-new_handler = CommandHandler("new", new)
-dispatcher.add_handler(new_handler)
+for cmdString in commList:
+    new_handler = CommandHandler(cmdString, getattr(botCommands, cmdString))
+    dispatcher.add_handler(new_handler)
 
 # Start polling commands
 updater.start_polling()
